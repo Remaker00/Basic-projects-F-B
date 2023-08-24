@@ -10,18 +10,11 @@ exports.insertUser = async(req, res) => {
     };
 };
 
-exports.getUser = async (req, res) => {
-    const email = req.params.email;
+exports.getAllUsers = async (req, res) => {
     try {
-        const user = await User.findOne({email});
-
-        if (user) {
-            res.json({ exists: true });
-        } else {
-            res.json({ exists: false });
-        }
-    } catch (error) {
-        console.error("Error while checking email existence:", error);
-        res.status(500).json({ error: "Internal server error" });
+        const users = await User.findAll();
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).send('Error fetching users.');
     }
-}
+};

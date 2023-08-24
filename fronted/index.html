@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignUp Form</title>
+    <link rel="styele" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Sign-Up Form</h1>
         <form id="user-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" required>
+            <span id="name-container">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+            </span>
             <label for="email">User Email:</label>
-            <input type="email" id="email" required>
-            <label for="password" placeholder="password"></label>
-            <input type="Text" id="password" required>
-            <button type="submit" value="submit">Login</button>
+            <input type="email" id="email">
+            <label for="password"></label>
+            <input type="number" id="password" required>
+            <button type="submit" value="submit">Sign Up</button>
+            <div id="coustom button">
+                <a id="itm1" href="login">Existing Account</a>
+            </div>
         </form>
+        <ul id="user-list"></ul>
     </div>
     <script src="script.js"></script>
 </body>

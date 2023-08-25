@@ -1,20 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
-const sequelize = require('./backend/config/database'); // Import your Sequelize setup
-const signupRoutes = require('./backend/routes/signup');
-const loginRoutes = require('./backend/routes/login');
-
 const app = express();
 
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'frontend')));
+const route = require('./routes/route');
+const login = require('./routes/login')
+const { sequelize } = require('./dataB');
 
-app.use(signupRoutes);
-app.use(loginRoutes);
+app.use(bodyParser.json());
+app.use(express.static('views'));
+
+app.use('/exp', route);
+app.use('/login', login);
 
 sequelize.sync().then(() => {
-  app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-  });
+    app.listen(4000, () => {
+        console.log(`App started`);
+    });
+}).catch(err => {
+    console.error('Error syncing database:', err);
 });

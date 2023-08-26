@@ -11,11 +11,13 @@ const Expense = sequelize.define('users', {
     category: Sequelize.STRING
 });
 
-const login = sequelize.define('login', {
+const signup = sequelize.define('signup', {
+    name: Sequelize.STRING,
     email: Sequelize.STRING,
-    password: Sequelize.DOUBLE
+    password: Sequelize.TEXT
 });
 
+
 module.exports = {
-    sequelize, Expense, login
+    sequelize, Expense, signup
 };

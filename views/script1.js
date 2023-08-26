@@ -1,8 +1,10 @@
 const userForm = document.getElementById('user-form');
 const userList = document.getElementById('user-list');
-const userLogin = document.getElementById('loginform');
 
-userForm.addEventListener('submit', async (event) => {
+userForm.addEventListener('submit', handleUserForm);
+
+
+async function handleUserForm(event) {
     event.preventDefault();
 
     const expense = document.getElementById('expense').value;
@@ -16,7 +18,7 @@ userForm.addEventListener('submit', async (event) => {
     };
 
     try {
-        await fetch('/exp', {
+        await fetch(`/exp`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,7 +34,7 @@ userForm.addEventListener('submit', async (event) => {
     } catch (error) {
         console.error('Error:', error);
     }
-});
+};
 
 function fetchUsers() {
     fetch('/exp')
@@ -73,29 +75,4 @@ async function deleteUser(userId) {
 
 fetchUsers();
 
-userLogin.addEventListener('submit', async (event) => {
-    event.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    const data = { email, password};
-    try {
-        await fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-
-        alert("Logged In Successfully!!")
-
-        window.location.href = "Expense.html";
-
-    } catch (error) {
-        console.error('Error:', error);
-    }
-
-});

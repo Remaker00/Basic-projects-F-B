@@ -1,10 +1,11 @@
 const {Expense} = require('../dataB');
-const {login} = require('../dataB')
+const {signup} = require('../dataB')
+const bcrypt = require('bcrypt');
 
 exports.insertExp = async (req, res) => {
     const { expense, description, category} = req.body;
     try{
-        const exp = await Expense.create({ expense, description, category});
+        await Expense.create({ expense, description, category });
         res.status(201).send('User inserted successfully.');
     } catch (err) {
         console.error(err);
@@ -24,26 +25,50 @@ exports.getAllExp = async (req, res) => {
 };
 
 exports.deleteExp = async (req, res) => {
-    const userId = req.params.id;
+    const expenseId = req.params.id; // Change "userId" to "expenseId" for clarity
     try {
-        const user = await Expense.findByPk(userId);
-        if (user) {
-            await user.destroy();
-            res.status(200).send('User deleted successfully.');
-        } else {
-            res.status(404).send('User not found.');
+        const expense = await Expense.findByPk(expenseId);
+        if (!expense) {
+            res.status(404).send('Expense not found.');
+            return;
         }
+
+        await expense.destroy();
+        res.status(200).send('Expense deleted successfully.');
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error deleting user.');
+        res.status(500).send('Error deleting expense.');
     }
 };
 
-exports.insertlogin = async (req, res) => {
+exports.insertusers = async (req, res) => {
+    const { name, email, password } = req.body;
+    try{
+        const hashpass = await bcrypt.hash(password, 10);
+        await signup.create({ name, email, password: hashpass });
+        res.status(201).send('User LoggedIn successfully.');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error Logging user.');
+    }
+};
+
+exports.checkusers = async (req, res) => {
     const { email, password } = req.body;
     try{
-        const log = await login.create({ email, password });
-        res.status(201).send('User LoggedIn successfully.');
+        const user = await signup.findOne({where: { email } });
+
+        if (user) {
+            const passwordMatch = await bcrypt.compare(password, user.password);
+
+            if (passwordMatch) {
+                res.status(200).send('User LoggedIn successfully.');
+            } else {
+                res.status(401).send('Invalid credentials.');
+            }
+        } else {
+            res.status(401).send('Invalid credentials.');
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Error Logging user.');
